@@ -17,7 +17,7 @@ load_dotenv()
 #turn off httpx logging except for errors
 logging.getLogger("httpx").setLevel(logging.ERROR)
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn.app")
 
 MODEL = "anthropic/claude-sonnet-4.6"
 # MODEL = "anthropic/claude-haiku-4.5"
