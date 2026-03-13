@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import time
+import logging
  
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
@@ -13,12 +14,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MODEL = "anthropic/claude-sonnet-4-5"
+#turn off httpx logging except for errors
+logging.getLogger("httpx").setLevel(logging.ERROR)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+MODEL = "anthropic/claude-sonnet-4.6"
 # MODEL = "anthropic/claude-haiku-4.5"
 PHOENIX_API_KEY = os.getenv("PHOENIX_API_KEY")
 PHOENIX_MCP_URL = f"https://phoenix.hginsights.com/api/ai/{PHOENIX_API_KEY}/mcp"
 
-print("OPENROUTER KEY PRESENT:", bool(os.getenv("OPENROUTER_API_KEY")))
+logger.info(f"OPENROUTER KEY PRESENT: {bool(os.getenv('OPENROUTER_API_KEY'))}")
+logger.info(f"Using model: {MODEL}")    
 
 TOOL_CACHE_TTL = 3600
 
@@ -45,7 +52,8 @@ Call these tools using the extracted domain:
 5. company_operating_signals — AI maturity, cloud posture, automation stage
 6. contact_search (seniority = ["vp", "c_suite", "director", "head"], limit = 10)
 
-If company_fai returns no data, note it and continue — do not stop.
+company_fai needs one or a list of products or it will fail. If company_fai returns no data, note it and continue — do not stop.
+always limit the number of results returned by the tools, either by setting a hard limit, or using the available filters (e.g. for company technographic, only return technologies relevant to what the rep is selling).
 
 STEP 3 — ANALYZE THROUGH THE PRODUCT LENS
 Before writing a single word of output, reason through these questions internally:
@@ -241,7 +249,7 @@ class MCPClient:
 
         response = await self.session.list_tools()
         self.available_tools = [convert_tool_format(t) for t in response.tools]
-        print(f"Connected to Phoenix MCP — {len(self.available_tools)} tools available")
+        logger.info(f"Connected to Phoenix MCP — {len(self.available_tools)} tools available")
 
     async def _run_llm_with_tools(
         self,
@@ -273,10 +281,11 @@ class MCPClient:
                 tool_args = json.loads(tool_call.function.arguments or "{}")
  
                 cache_key = _cache_key(tool_name, tool_args)
+                logger.debug(f"Tool call requested: {tool_name} with args {tool_args}. Cache key: {cache_key}")
                 cached_result = self._get_cached(cache_key)
                 was_cached = cached_result is not None
                 
-                print(f"  [Tool: {tool_name}, cached: {was_cached}]")
+                logger.info(f"Tool call: {tool_name}, cached: {was_cached}")
  
                 if was_cached:
                     tool_content = cached_result

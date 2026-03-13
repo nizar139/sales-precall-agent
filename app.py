@@ -56,7 +56,7 @@ with left:
         prompt_input = st.text_area(
             "Describe your call",
             placeholder=(
-                "e.g. I'm calling 2-times.com — I'm selling a headless CMS platform\n\n"
+                "e.g. I'm calling meta.com — I'm selling a headless CMS platform\n\n"
                 "or: Research stripe.com, we sell data observability tools and they're a Snowflake customer\n\n"
                 "or: acme.com — pitching our Salesforce CPQ integration"
             ),
