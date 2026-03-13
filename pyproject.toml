@@ -1,0 +1,12 @@
+[project]
+name = "precall-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.135.1",
+    "mcp>=1.26.0",
+    "openai>=2.26.0",
+    "streamlit>=1.55.0",
+]
