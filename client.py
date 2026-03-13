@@ -53,7 +53,7 @@ Call these tools using the extracted domain:
 6. contact_search (seniority = ["vp", "c_suite", "director", "head"], limit = 10)
 
 company_fai needs one or a list of products or it will fail. If company_fai returns no data, note it and continue — do not stop.
-always limit the number of results returned by the tools, either by setting a hard limit, or using the available filters.
+always limit the number of results returned by the tools.
 
 STEP 3 — ANALYZE THROUGH THE PRODUCT LENS
 Before writing a single word of output, reason through these questions internally:
