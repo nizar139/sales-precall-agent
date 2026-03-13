@@ -18,6 +18,8 @@ MODEL = "anthropic/claude-sonnet-4-5"
 PHOENIX_API_KEY = os.getenv("PHOENIX_API_KEY")
 PHOENIX_MCP_URL = f"https://phoenix.hginsights.com/api/ai/{PHOENIX_API_KEY}/mcp"
 
+print("OPENROUTER KEY PRESENT:", bool(os.getenv("OPENROUTER_API_KEY")))
+
 TOOL_CACHE_TTL = 3600
 
 
