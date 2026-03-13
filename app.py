@@ -5,8 +5,11 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
- 
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+
+try:
+    BACKEND_URL = st.secrets.get("BACKEND_URL")
+except:
+    BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
  
 # Try env / Streamlit secrets first (local dev + CI), otherwise ask the user
 _env_key = os.getenv("INTERNAL_API_KEY")
